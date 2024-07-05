@@ -11,6 +11,10 @@ func CreateRouter() *echo.Echo {
 
 	e.GET("/", IndexGetHandler)
 
+	v1 := e.Group("/v1")
+
+	v1.GET("/valid/:postalCode", ValidPostalCodeGetHandler)
+
 	return e
 }
 

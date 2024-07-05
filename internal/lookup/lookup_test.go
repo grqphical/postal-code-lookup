@@ -27,7 +27,7 @@ func TestIsValidPostalCode(t *testing.T) {
 	}
 
 	for _, testCase := range testCases {
-		assert.Equal(t, testCase.expected, isValidPostalCode(strings.ToLower(testCase.postalCode)), "Failed on: %s", testCase.postalCode)
+		assert.Equal(t, testCase.expected, IsValidPostalCode(strings.ToLower(testCase.postalCode)), "Failed on: %s", testCase.postalCode)
 	}
 
 }

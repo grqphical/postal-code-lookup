@@ -17,8 +17,8 @@ type PostalCode struct {
 	PostOffice                 bool   `json:"postOffice"`
 }
 
-// isValidPostalCode checks if a given string is a valid Canadian postal code
-func isValidPostalCode(postalCode string) bool {
+// IsValidPostalCode checks if a given string is a valid Canadian postal code
+func IsValidPostalCode(postalCode string) bool {
 	pattern := `^[abceghjklmnprstvxy]\d[abcdefghjklmnprstvxyz][ ]?\d[abceghjklmnprstvxywz]\d`
 
 	re := regexp.MustCompile(pattern)
@@ -80,7 +80,7 @@ func NewPostalCode(postalCode string) (PostalCode, error) {
 	postalCode = strings.ToLower(postalCode)
 	postalCode = strings.ReplaceAll(postalCode, " ", "")
 
-	if !isValidPostalCode(postalCode) {
+	if !IsValidPostalCode(postalCode) {
 		return postalCodeObj, errors.New("invalid postal code")
 	}
 
