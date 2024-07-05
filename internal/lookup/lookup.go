@@ -18,8 +18,7 @@ type PostalCode struct {
 
 // isValidPostalCode checks if a given string is a valid Canadian postal code
 func isValidPostalCode(postalCode string) bool {
-	postalCode = strings.ToUpper(postalCode)
-	pattern := `^[ABCEGHJKLMNPRSTVXY]\d[A-Z][ ]?\d[ABCEGHJKLMNPRSTVXY]\d`
+	pattern := `^[abceghjklmnprstvxy]\d[abcdefghjklmnprstvxyz][ ]?\d[abceghjklmnprstvxywz]\d`
 
 	re := regexp.MustCompile(pattern)
 
@@ -71,12 +70,14 @@ func getProvinceSubdivisionFromFSA(fsa string) (string, string, error) {
 	case 'y':
 		return "Yukon", "", nil
 	default:
-		return "", "", errors.New("invalid postal code")
+		return "", "", errors.New("invalid fsa")
 	}
 }
 
 func NewPostalCode(postalCode string) (PostalCode, error) {
 	var postalCodeObj PostalCode
+	postalCode = strings.ToLower(postalCode)
+	postalCode = strings.ReplaceAll(postalCode, " ", "")
 
 	if !isValidPostalCode(postalCode) {
 		return postalCodeObj, errors.New("invalid postal code")
@@ -93,9 +94,14 @@ func NewPostalCode(postalCode string) (PostalCode, error) {
 	if postalCode[1] != '0' {
 		postalCodeObj.Urban = true
 	}
+	if postalCode[3:6] == "9z9" {
+		postalCodeObj.BusinessReply = true
+	} else if postalCode[3:6] == "9z0" {
+		postalCodeObj.RegionalDistrubutionCentre = true
+	}
 
-	if postalCode[3:5] == "9z9" {
-
+	if postalCode[:3] == "k1a" {
+		postalCodeObj.GovernmentBuilding = true
 	}
 
 	return postalCodeObj, nil

@@ -1,6 +1,7 @@
 package lookup
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -26,7 +27,37 @@ func TestIsValidPostalCode(t *testing.T) {
 	}
 
 	for _, testCase := range testCases {
-		assert.Equal(t, testCase.expected, isValidPostalCode(testCase.postalCode), "Failed on: %s", testCase.postalCode)
+		assert.Equal(t, testCase.expected, isValidPostalCode(strings.ToLower(testCase.postalCode)), "Failed on: %s", testCase.postalCode)
 	}
 
+}
+
+func TestNewPostalCode(t *testing.T) {
+	testCases := []struct {
+		postalCode     string
+		expected       PostalCode
+		expectingError bool
+		expectedErrMsg string
+	}{
+		{"k1a 0b1", PostalCode{Province: "Ontario", Subdivision: "Ottawa", GovernmentBuilding: true, Urban: true}, false, ""},
+		{"b2c 3e4", PostalCode{Province: "Nova Scotia", Urban: true}, false, ""},
+		{"g1x 2z0", PostalCode{Province: "Quebec", Subdivision: "Eastern", Urban: true}, false, ""},
+		{"k1a1b2", PostalCode{Province: "Ontario", Subdivision: "Ottawa", GovernmentBuilding: true, Urban: true}, false, ""},
+		{"b2c9z9", PostalCode{Province: "Nova Scotia", Urban: true, BusinessReply: true}, false, ""},
+		{"x0a1b2", PostalCode{Province: "Nunavut"}, false, ""},
+		{"k1a-0b1", PostalCode{}, true, "invalid postal code"},
+		{"invalid", PostalCode{}, true, "invalid postal code"},
+	}
+
+	for _, testCase := range testCases {
+		postalCodeObj, err := NewPostalCode(testCase.postalCode)
+
+		if testCase.expectingError {
+			assert.NotNil(t, err)
+			assert.Equal(t, testCase.expectedErrMsg, err.Error())
+		} else {
+			assert.Nil(t, err)
+			assert.Equal(t, testCase.expected, postalCodeObj, testCase.postalCode)
+		}
+	}
 }
