@@ -14,6 +14,7 @@ type PostalCode struct {
 	RegionalDistrubutionCentre bool   `json:"regionalDistrubutionCentre"`
 	GovernmentBuilding         bool   `json:"governmentBuilding"`
 	BusinessReply              bool   `json:"businessReply"`
+	PostOffice                 bool   `json:"postOffice"`
 }
 
 // isValidPostalCode checks if a given string is a valid Canadian postal code
@@ -102,6 +103,10 @@ func NewPostalCode(postalCode string) (PostalCode, error) {
 
 	if postalCode[:3] == "k1a" {
 		postalCodeObj.GovernmentBuilding = true
+	}
+
+	if postalCode[5] == '0' {
+		postalCodeObj.PostOffice = true
 	}
 
 	return postalCodeObj, nil

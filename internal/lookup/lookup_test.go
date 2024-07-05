@@ -41,7 +41,7 @@ func TestNewPostalCode(t *testing.T) {
 	}{
 		{"k1a 0b1", PostalCode{Province: "Ontario", Subdivision: "Ottawa", GovernmentBuilding: true, Urban: true}, false, ""},
 		{"b2c 3e4", PostalCode{Province: "Nova Scotia", Urban: true}, false, ""},
-		{"g1x 2z0", PostalCode{Province: "Quebec", Subdivision: "Eastern", Urban: true}, false, ""},
+		{"g1x 2z0", PostalCode{Province: "Quebec", Subdivision: "Eastern", Urban: true, PostOffice: true}, false, ""},
 		{"k1a1b2", PostalCode{Province: "Ontario", Subdivision: "Ottawa", GovernmentBuilding: true, Urban: true}, false, ""},
 		{"b2c9z9", PostalCode{Province: "Nova Scotia", Urban: true, BusinessReply: true}, false, ""},
 		{"x0a1b2", PostalCode{Province: "Nunavut"}, false, ""},
