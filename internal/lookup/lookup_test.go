@@ -1,0 +1,32 @@
+package lookup
+
+import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
+
+func TestIsValidPostalCode(t *testing.T) {
+	testCases := []struct {
+		postalCode string
+		expected   bool
+	}{
+		{"K1A 0B1", true},  // Valid
+		{"Z9Z 9Z9", false}, // Invalid (Z as first character)
+		{"123 456", false}, // Invalid (only digits)
+		{"A1A1A1", true},   // Valid (no space)
+		{"K1A-0B1", false}, // Invalid (contains hyphen)
+		{"", false},        // Invalid (empty string)
+		{"K1A0B1", true},   // Valid (no space)
+		{"A1A-1A1", false}, // Invalid (contains hyphen)
+		{"A1A A1A", false}, // Invalid (wrong format)
+		{"X0X 0X0", true},  // Valid (edge case with X)
+		{"A1 1A1", false},  // Invalid (missing character),
+		{"foobaff", false}, // Invalid (not a postal code at all)
+	}
+
+	for _, testCase := range testCases {
+		assert.Equal(t, testCase.expected, isValidPostalCode(testCase.postalCode), "Failed on: %s", testCase.postalCode)
+	}
+
+}
