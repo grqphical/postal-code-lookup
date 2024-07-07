@@ -1,3 +1,6 @@
 main
 .env
 *.log
+tmp
+venv
+scraper.py

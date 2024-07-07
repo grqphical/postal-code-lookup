@@ -13,7 +13,7 @@ func CreateRouter() *echo.Echo {
 
 	v1 := e.Group("/v1")
 
-	v1.GET("/valid/:postalCode", ValidPostalCodeGetHandler)
+	v1.GET("/postal-code/:postalCode", PostalCodeInfoGetHandler)
 
 	return e
 }

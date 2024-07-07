@@ -1,10 +1,35 @@
 package lookup
 
 import (
+	"encoding/json"
 	"errors"
+	"os"
+	"path/filepath"
 	"regexp"
 	"strings"
 )
+
+var provinceAbbreviations map[string]string = map[string]string{
+	"British Columbia":             "BC",
+	"Alberta":                      "AB",
+	"Saskatchewan":                 "SK",
+	"Manitoba":                     "MB",
+	"Ontario Ottawa":               "ON1",
+	"Ontario Greater Toronto Area": "ON2",
+	"Ontario Toronto Proper":       "ON3",
+	"Ontario South":                "ON4",
+	"Ontario North ":               "ON5",
+	"Quebec Eastern":               "QC1",
+	"Quebec Greater Montreal Area": "QC2",
+	"Quebec Eastern Western":       "QC3",
+	"New Brunswick":                "NB",
+	"Nova Scotia":                  "NS",
+	"Prince Edward Island":         "PE",
+	"Newfoundland and Labrador":    "NL",
+	"Yukon":                        "YT",
+	"Northwest Territories":        "NT",
+	"Nunavut":                      "NU",
+}
 
 type PostalCode struct {
 	Urban                      bool   `json:"urban"`
@@ -75,6 +100,44 @@ func getProvinceSubdivisionFromFSA(fsa string) (string, string, error) {
 	}
 }
 
+func stripExtension(filename string) string {
+	ext := filepath.Ext(filename)
+	return strings.TrimSuffix(filename, ext)
+}
+
+func getMunicipalityByFSA(fsa string) (string, error) {
+	dataFiles, err := os.ReadDir("./data")
+	if err != nil {
+		return "", errors.New("data not found")
+	}
+	var provinceFull string
+	prov, subdivision, _ := getProvinceSubdivisionFromFSA(fsa)
+	if subdivision != "" {
+		provinceFull = prov + " " + subdivision
+	} else {
+		provinceFull = prov
+	}
+
+	for _, file := range dataFiles {
+		if stripExtension(file.Name()) == provinceAbbreviations[provinceFull] {
+			data, err := os.ReadFile(filepath.Join("data", file.Name()))
+			if err != nil {
+				return "", err
+			}
+
+			var jsonData map[string]string
+			err = json.Unmarshal(data, &jsonData)
+			if err != nil {
+				return "", err
+			}
+
+			return jsonData[strings.ToUpper(fsa)], nil
+		}
+	}
+
+	return "", errors.New("this shouldn't happen")
+}
+
 func NewPostalCode(postalCode string) (PostalCode, error) {
 	var postalCodeObj PostalCode
 	postalCode = strings.ToLower(postalCode)
@@ -91,6 +154,11 @@ func NewPostalCode(postalCode string) (PostalCode, error) {
 
 	postalCodeObj.Province = province
 	postalCodeObj.Subdivision = subdivision
+	municipality, err := getMunicipalityByFSA(postalCode[:3])
+	if err != nil {
+		return postalCodeObj, err
+	}
+	postalCodeObj.Municipality = municipality
 
 	if postalCode[1] != '0' {
 		postalCodeObj.Urban = true
