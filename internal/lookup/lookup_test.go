@@ -1,6 +1,7 @@
 package lookup
 
 import (
+	"os"
 	"strings"
 	"testing"
 
@@ -48,6 +49,9 @@ func TestNewPostalCode(t *testing.T) {
 		{"k1a-0b1", PostalCode{}, true, "invalid postal code"},
 		{"invalid", PostalCode{}, true, "invalid postal code"},
 	}
+
+	err := os.Chdir("../../")
+	assert.Nil(t, err)
 
 	for _, testCase := range testCases {
 		postalCodeObj, err := NewPostalCode(testCase.postalCode)
