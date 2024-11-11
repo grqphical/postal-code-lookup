@@ -2,10 +2,10 @@ package lookup
 
 import (
 	"database/sql"
-	"os"
 	"strings"
 	"testing"
 
+	_ "github.com/mattn/go-sqlite3"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -51,7 +51,7 @@ func TestNewPostalCode(t *testing.T) {
 		{"invalid", PostalCode{}, true, "invalid postal code"},
 	}
 
-	conn, err := sql.Open("sqlite3", os.Getenv("DATABASE_URL"))
+	conn, err := sql.Open("sqlite3", "../../database.sqlite3")
 	assert.Nil(t, err)
 
 	for _, testCase := range testCases {
