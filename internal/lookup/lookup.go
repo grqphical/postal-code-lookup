@@ -106,10 +106,11 @@ func stripExtension(filename string) string {
 }
 
 func getMunicipalityByFSA(fsa string) (string, error) {
-	dataFiles, err := os.ReadDir("./data")
+	dataFiles, err := os.ReadDir("../../data")
 	if err != nil {
-		return "", errors.New("data not found")
+		return "", errors.New("could not read data directory")
 	}
+
 	var provinceFull string
 	prov, subdivision, _ := getProvinceSubdivisionFromFSA(fsa)
 	if subdivision != "" {
@@ -120,7 +121,7 @@ func getMunicipalityByFSA(fsa string) (string, error) {
 
 	for _, file := range dataFiles {
 		if stripExtension(file.Name()) == provinceAbbreviations[provinceFull] {
-			data, err := os.ReadFile(filepath.Join("data", file.Name()))
+			data, err := os.ReadFile(filepath.Join("../", "../", "data", file.Name()))
 			if err != nil {
 				return "", err
 			}
