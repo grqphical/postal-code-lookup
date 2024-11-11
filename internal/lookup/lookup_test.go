@@ -1,6 +1,7 @@
 package lookup
 
 import (
+	"database/sql"
 	"os"
 	"strings"
 	"testing"
@@ -50,11 +51,11 @@ func TestNewPostalCode(t *testing.T) {
 		{"invalid", PostalCode{}, true, "invalid postal code"},
 	}
 
-	err := os.Chdir("../../")
+	conn, err := sql.Open("sqlite3", os.Getenv("DATABASE_URL"))
 	assert.Nil(t, err)
 
 	for _, testCase := range testCases {
-		postalCodeObj, err := NewPostalCode(testCase.postalCode)
+		postalCodeObj, err := NewPostalCode(testCase.postalCode, conn)
 
 		if testCase.expectingError {
 			assert.NotNil(t, err, testCase.postalCode)

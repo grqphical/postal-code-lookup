@@ -8,10 +8,10 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func PostalCodeInfoGetHandler(c echo.Context) error {
+func (s *server) PostalCodeInfoGetHandler(c echo.Context) error {
 	postalCode := strings.ToLower(c.Param("postalCode"))
 
-	postalCodeObj, err := lookup.NewPostalCode(postalCode)
+	postalCodeObj, err := lookup.NewPostalCode(postalCode, s.db)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
