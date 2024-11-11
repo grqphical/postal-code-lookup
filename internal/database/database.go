@@ -7,6 +7,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+// initalizes the database connection
 func InitDB() (*sql.DB, error) {
 	conn, err := sql.Open("sqlite3", os.Getenv("DATABASE_URL"))
 	if err != nil {

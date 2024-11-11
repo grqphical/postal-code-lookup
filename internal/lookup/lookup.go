@@ -76,6 +76,7 @@ func getProvinceSubdivisionFromFSA(fsa string) (string, string, error) {
 	}
 }
 
+// Gets the municipality for the given Forward Sorition Area from the database
 func getMunicipalityByFSA(fsa string, db *sql.DB) (string, error) {
 	var municipality string
 	row := db.QueryRow("SELECT municipality FROM Municipalities WHERE fsa = ?", strings.ToUpper(fsa))
@@ -84,6 +85,8 @@ func getMunicipalityByFSA(fsa string, db *sql.DB) (string, error) {
 	return municipality, err
 }
 
+// Validates a postal code then extracts all relevant information from the code. After validation and extraction,
+// this function returns a struct containing all the information extracted.
 func NewPostalCode(postalCode string, db *sql.DB) (PostalCode, error) {
 	var postalCodeObj PostalCode
 	postalCode = strings.ToLower(postalCode)
