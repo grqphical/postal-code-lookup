@@ -12,6 +12,10 @@ Clone the repo, make sure you have Golang installed, then run:
 $ make run
 ```
 
+## Docs
+
+Swagger API Docs are available at `/docs`
+
 ## Endpoints
 
 ### `/`
