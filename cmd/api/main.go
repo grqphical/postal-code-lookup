@@ -11,11 +11,15 @@ import (
 // @version 1.0
 // @description An API to extract information about Canadian postal codes
 
+// @contact.name grqphical
+// @contact.url https://github.com/grqphical/postal-code-lookup
+
 //	@license.name	GNU Public License Version 3.0
 //	@license.url	https://github.com/grqphical/postal-code-lookup/blob/main/LICENSE
 
 //	@host		localhost:8000
 //	@BasePath	/v1
+//  @produce json
 
 func main() {
 	e := routes.CreateRouter()

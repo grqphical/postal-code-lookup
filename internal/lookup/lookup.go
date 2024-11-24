@@ -10,14 +10,14 @@ import (
 // PostalCode model info
 // @Description Contains the extracted data from the given postal code
 type PostalCode struct {
-	Urban                      bool   `json:"urban"`
-	Province                   string `json:"province"`
-	Subdivision                string `json:"subdivision"`
-	Municipality               string `json:"municipality"`
-	RegionalDistrubutionCentre bool   `json:"regionalDistrubutionCentre"`
-	GovernmentBuilding         bool   `json:"governmentBuilding"`
-	BusinessReply              bool   `json:"businessReply"`
-	PostOffice                 bool   `json:"postOffice"`
+	Urban                      bool   `json:"urban"`                      // whether or not the postal code is in an urban center
+	Province                   string `json:"province"`                   // what province/territory the postal code is in
+	Subdivision                string `json:"subdivision"`                // for the bigger provinces, which area of the province is it in
+	Municipality               string `json:"municipality"`               // what municipality the postal code is located in
+	RegionalDistrubutionCentre bool   `json:"regionalDistrubutionCentre"` // is the postal code a Canada post distribution centre
+	GovernmentBuilding         bool   `json:"governmentBuilding"`         // does the postal code belong to a building owned by the Canadian government
+	BusinessReply              bool   `json:"businessReply"`              // is this code used as part of the Business Reply system
+	PostOffice                 bool   `json:"postOffice"`                 // is this code a Canada Post post office
 }
 
 // IsValidPostalCode checks if a given string is a valid Canadian postal code

@@ -16,7 +16,7 @@ import (
 
 // httpError model info
 // @Description JSON object returned whenever an error occurs
-type httpError struct {
+type HttpError struct {
 	Message string `json:"message"`
 }
 
@@ -62,9 +62,12 @@ func (s *server) IndexGetHandler(c echo.Context) error {
 // @Produce json
 // @Param postalCode path string true "Postal Code to extract info from"
 // @Success 200 {object} lookup.PostalCode
-// @Failure 400 {object} httpError
+// @Failure 400 {object} HttpError
 // @Router /postal-code/{postalCode} [get]
 func (s *server) PostalCodeInfoGetHandler(c echo.Context) error {
+	c.Response().Header().Add("Content-Type", "application/json")
+	c.Response().Header().Add("Allow", "GET")
+
 	postalCode := strings.ToLower(c.Param("postalCode"))
 
 	postalCodeObj, err := lookup.NewPostalCode(postalCode, s.db)
