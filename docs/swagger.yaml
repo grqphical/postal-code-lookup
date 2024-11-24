@@ -1,0 +1,82 @@
+basePath: /v1
+definitions:
+  lookup.PostalCode:
+    description: Contains the extracted data from the given postal code
+    properties:
+      businessReply:
+        description: is this code used as part of the Business Reply system
+        type: boolean
+      governmentBuilding:
+        description: does the postal code belong to a building owned by the Canadian
+          government
+        type: boolean
+      municipality:
+        description: what municipality the postal code is located in
+        type: string
+      postOffice:
+        description: is this code a Canada Post post office
+        type: boolean
+      province:
+        description: what province/territory the postal code is in
+        type: string
+      regionalDistrubutionCentre:
+        description: is the postal code a Canada post distribution centre
+        type: boolean
+      subdivision:
+        description: for the bigger provinces, which area of the province is it in
+        type: string
+      urban:
+        description: whether or not the postal code is in an urban center
+        type: boolean
+    type: object
+  routes.HttpError:
+    description: JSON object returned whenever an error occurs
+    properties:
+      message:
+        type: string
+    type: object
+host: localhost:8000
+info:
+  contact:
+    name: grqphical
+    url: https://github.com/grqphical/postal-code-lookup
+  description: An API to extract information about Canadian postal codes
+  license:
+    name: GNU Public License Version 3.0
+    url: https://github.com/grqphical/postal-code-lookup/blob/main/LICENSE
+  title: Canadian Postal Code Lookup API
+  version: "1.0"
+paths:
+  /:
+    get:
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: ""
+      summary: check the status of the API
+  /postal-code/{postalCode}:
+    get:
+      parameters:
+      - description: Postal Code to extract info from
+        in: path
+        name: postalCode
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/lookup.PostalCode'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/routes.HttpError'
+      summary: extracts information about a postal code
+produces:
+- application/json
+swagger: "2.0"
