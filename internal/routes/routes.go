@@ -14,6 +14,12 @@ import (
 	echoSwagger "github.com/swaggo/echo-swagger"
 )
 
+// httpError model info
+// @Description JSON object returned whenever an error occurs
+type httpError struct {
+	Message string `json:"message"`
+}
+
 // struct to store shared state between routes
 type server struct {
 	db *sql.DB
@@ -54,8 +60,9 @@ func (s *server) IndexGetHandler(c echo.Context) error {
 // PostalCodeInfoGetHandler godoc
 // @Summary extracts information about a postal code
 // @Produce json
+// @Param postalCode path string true "Postal Code to extract info from"
 // @Success 200 {object} lookup.PostalCode
-// @Failure 400 {} string
+// @Failure 400 {object} httpError
 // @Router /postal-code/{postalCode} [get]
 func (s *server) PostalCodeInfoGetHandler(c echo.Context) error {
 	postalCode := strings.ToLower(c.Param("postalCode"))

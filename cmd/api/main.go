@@ -15,7 +15,7 @@ import (
 //	@license.url	https://github.com/grqphical/postal-code-lookup/blob/main/LICENSE
 
 //	@host		localhost:8000
-//	@BasePath	/api/v1
+//	@BasePath	/v1
 
 func main() {
 	e := routes.CreateRouter()
