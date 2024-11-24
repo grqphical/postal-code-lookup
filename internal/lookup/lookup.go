@@ -7,6 +7,8 @@ import (
 	"strings"
 )
 
+// PostalCode model info
+// @Description Contains the extracted data from the given postal code
 type PostalCode struct {
 	Urban                      bool   `json:"urban"`
 	Province                   string `json:"province"`

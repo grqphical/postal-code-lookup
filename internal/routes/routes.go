@@ -9,6 +9,9 @@ import (
 	"github.com/grqphical/postal-code-lookup-api/internal/database"
 	"github.com/grqphical/postal-code-lookup-api/internal/lookup"
 	"github.com/labstack/echo/v4"
+
+	_ "github.com/grqphical/postal-code-lookup-api/docs"
+	echoSwagger "github.com/swaggo/echo-swagger"
 )
 
 // struct to store shared state between routes
@@ -30,6 +33,8 @@ func CreateRouter() *echo.Echo {
 
 	e.GET("/", s.IndexGetHandler)
 
+	e.GET("/docs/*", echoSwagger.WrapHandler)
+
 	v1 := e.Group("/v1")
 
 	v1.GET("/postal-code/:postalCode", s.PostalCodeInfoGetHandler)
@@ -37,10 +42,21 @@ func CreateRouter() *echo.Echo {
 	return e
 }
 
+// IndexGetHandler godoc
+// @Summary check the status of the API
+// @Produce plain
+// @Success 200 {} string
+// @Router / [get]
 func (s *server) IndexGetHandler(c echo.Context) error {
 	return c.String(http.StatusOK, "OK")
 }
 
+// PostalCodeInfoGetHandler godoc
+// @Summary extracts information about a postal code
+// @Produce json
+// @Success 200 {object} lookup.PostalCode
+// @Failure 400 {} string
+// @Router /postal-code/{postalCode} [get]
 func (s *server) PostalCodeInfoGetHandler(c echo.Context) error {
 	postalCode := strings.ToLower(c.Param("postalCode"))
 
